@@ -17,3 +17,9 @@ Part II:
 ```
 docker-compose --env-file .env up --build
 ```
+
+## Start service locally
+php -S localhost:8000 -t public
+
+## Docker compose
+docker-compose --env-file .env up --build

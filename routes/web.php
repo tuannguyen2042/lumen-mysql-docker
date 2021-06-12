@@ -15,5 +15,15 @@ use Illuminate\Support\Facades\DB;
 */
 
 $router->get('/', function () use ($router) {
-    dd(DB::getPDO());
+    return $router->app->version();
+});
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('employees/{id}', ['uses' => 'EmployeeController@show']);
+    $router->post('employees', ['uses' => 'EmployeeController@create']);
+    $router->put('employees/{id}', ['uses' => 'EmployeeController@update']);
+    $router->delete('employees/{id}', ['uses' => 'EmployeeController@delete']);
+
+    $router->get('employees/{id}/children', ['uses' => 'EmployeeController@children']);
+    $router->get('employees/search/{field}/{value}', 'EmployeeController@search');
 });
