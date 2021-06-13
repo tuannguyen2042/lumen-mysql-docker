@@ -18,3 +18,12 @@ nevo.postman_collection.json
 
 ## API document
 http://localhost:8000/swagger-ui.html
+
+## Run integration tests with Codeception
+php vendor/bin/codecept run unit
+
+## Run API test with Codeception
+php vendor/bin/codecept run api
+
+## Run all tests with Codeception
+php vendor/bin/codecept run

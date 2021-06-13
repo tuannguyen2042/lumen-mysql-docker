@@ -17,6 +17,12 @@ class EmployeeController extends Controller
         //
     }
 
+    /**
+     * Get data of an employee by ID
+     *
+     * @param [int] $id
+     * @return Employee
+     */
     public function show($id) {
         $employee = Employee::find($id);
 
@@ -27,17 +33,18 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'Not Found!'], 404);
     }
 
+    /**
+     * Update an employee
+     *
+     * @param [int] $id
+     * @param Request $request
+     * @return Employee
+     */
     public function update($id, Request $request) {
         $employee = Employee::find($id);
 
         if ($employee) {
-            $employee->name = $request->name;
-            $employee->position = $request->position;
-            $employee->superior = $request->superior;
-            $employee->startDate = $request->startDate;
-            $employee->endDate = $request->endDate;
-
-            if ($employee->save()) {
+            if ($employee->save($request->all())) {
                 return response()->json($employee);
             }
             
@@ -48,24 +55,30 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'Not Found!'], 404);
     }
 
+    /**
+     * Create an employee
+     *
+     * @param Request $request
+     * @return Employee
+     */
     public function create(Request $request) {        
-        $employee = new Employee();
-
-        $employee->name = $request->name;
-        $employee->position = $request->position;
-        $employee->superior = $request->superior;
-        $employee->startDate = $request->startDate;
-        $employee->endDate = $request->endDate;
+        $employee = new Employee;
 
         // create sucessful employee -> 201
-        if ($employee->save()) {
-            return response()->json($employee, 201);
+        if ($ret = $employee->create($request->all())) {
+            return response()->json($ret, 201);
         }
 
         // error in validation -> 400
         return response()->json($employee->getErrors(), 400);            
     }
 
+    /**
+     * Delete an employee by ID
+     *
+     * @param [int] $id
+     * @return void
+     */
     public function delete($id) {
         $employee = Employee::find($id);
 
@@ -82,6 +95,12 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'Not Found!'], 404);
     }
 
+    /**
+     * Get list of child employees of a parent employee with a management position
+     *
+     * @param [int] $id
+     * @return array[Employee]
+     */
     public function children($id) {
         $employee = Employee::find($id);
 
@@ -95,6 +114,13 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'Not Found!'], 404);
     }
 
+    /**
+     * Search employees by field / value pair of parameters.
+     *
+     * @param [string] $field
+     * @param [string] $value
+     * @return array[Employee]
+     */
     public function search($field, $value) {
         $employees = Employee::where($field, $value)->get();
 
